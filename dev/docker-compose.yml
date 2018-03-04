@@ -1,0 +1,66 @@
+# About Mesos-Master, Mesos-Slave and Chronos
+# source: https://hub.docker.com/r/datastrophic/chronos/ 
+
+version: '3'
+services:
+
+  zookeeper:
+    container_name: zookeeper
+    hostname: zookeeper
+    image: mesoscloud/zookeeper:3.4.6-ubuntu-14.04
+    ports:
+      - 2181:2181
+      - 2888:2888
+      - 3888:3888
+  
+  mesos-master:
+    container_name: master
+    hostname: mesos-master
+    image: mesosphere/mesos-master:1.4.0
+    privileged: true
+    environment:
+      - MESOS_HOSTNAME=$HOST_IP_ADDR
+      - MESOS_CLUSTER=SMACK
+      - MESOS_QUORUM=1
+      - MESOS_ZK=zk://zookeeper:2181/mesos
+      - MESOS_LOG_DIR=/tmp/mesos/logs
+    links:
+      - zookeeper
+    ports:
+      - 5050:5050
+
+  mesos-slave:
+    container_name: slave
+    hostname: mesos-slave
+    image: mesosphere/mesos-slave:1.4.0
+    privileged: true
+    environment:
+      - MESOS_HOSTNAME=$HOST_IP_ADDR
+      - MESOS_PORT=5151
+      - MESOS_MASTER=zk://zookeeper:2181/mesos
+      - MESOS_WORK_DIR=/var/lib/mesos
+      - MESOS_SYSTEMD_ENABLE_SUPPORT=false
+      - MESOS_CONTAINERIZERS=docker,mesos
+      - MESOS_EXECUTOR_REGISTRATION_TIMEOUT=5mins
+    links:
+      - zookeeper
+      - mesos-master
+    ports:
+      - 5151:5151
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  chronos:
+    container_name: chronos
+    hostname: chronos
+    image: datastrophic/chronos:mesos-1.1.0-chronos-3.0.1
+    environment:
+      - CHRONOS_HOSTNAME=$HOST_IP_ADDR
+      - CHRONOS_HTTP_PORT=4400
+      - CHRONOS_MASTER=zk://zookeeper:2181/mesos
+      - CHRONOS_ZK_HOSTS=zookeeper:2181
+    links:
+      - zookeeper
+      - mesos-master
+    ports:
+      - 4400:4400

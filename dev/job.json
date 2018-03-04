@@ -1,0 +1,45 @@
+{
+  "name": "springboot-mesos-chronos-job",
+  "command": "java -jar /springboot-mesos-chronos.jar",
+  "shell": true,
+  "executor": "",
+  "executorFlags": "",
+  "taskInfoData": "",
+  "retries": 0,
+  "owner": "",
+  "ownerName": "",
+  "description": "What this job does is ...",
+  "cpus": 0.1,
+  "disk": 0,
+  "mem": 999,
+  "disabled": false,
+  "softError": false,
+  "dataProcessingJobType": false,
+  "fetch": [],
+  "uris": [],
+  "environmentVariables": [
+    {
+      "name": "EXIT_CODE",
+      "value": "0"
+    },
+    {
+      "name": "SLEEP",
+      "value": "1000"
+    }
+  ],
+  "arguments": [],
+  "highPriority": false,
+  "runAsUser": "root",
+  "concurrent": false,
+  "container": {
+    "type": "docker",
+    "image": "docker.mycompany.com/springboot-mesos-chronos:0.0.1",
+    "network": "HOST",
+    "volumes": [],
+    "forcePullImage": false,
+    "parameters": []
+  },
+  "constraints": [],
+  "schedule": "R/2018-03-04T08:50:00.000Z/PT2M",
+  "scheduleTimeZone": ""
+}
