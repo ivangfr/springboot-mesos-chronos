@@ -33,13 +33,13 @@
   "concurrent": false,
   "container": {
     "type": "docker",
-    "image": "docker.mycompany.com/springboot-mesos-chronos:0.0.1",
+    "image": "docker.mycompany.com/springboot-mesos-chronos:1.0.0",
     "network": "HOST",
     "volumes": [],
     "forcePullImage": false,
     "parameters": []
   },
   "constraints": [],
-  "schedule": "R/2018-03-04T08:50:00.000Z/PT2M",
+  "schedule": "R/2018-06-02T08:50:00.000Z/PT2M",
   "scheduleTimeZone": ""
 }
