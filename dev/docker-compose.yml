@@ -6,9 +6,12 @@ services:
     image: zookeeper:3.5
     ports:
       - 2181:2181
+    healthcheck:
+      test: "nc -z -v localhost 2181"
+      start_period: 10s
   
   mesos-master:
-    container_name: master
+    container_name: mesos-master
     image: mesosphere/mesos-master:1.5.0
     privileged: true
     environment:
@@ -21,10 +24,12 @@ services:
       - zookeeper
     ports:
       - 5050:5050
+    healthcheck:
+      test: "curl -f http://localhost:5050/health || exit 1"
+      start_period: 10s
 
   mesos-slave:
-    container_name: slave
-    hostname: mesos-slave
+    container_name: mesos-slave
     image: mesosphere/mesos-slave:1.5.0
     privileged: true
     environment:
@@ -42,10 +47,13 @@ services:
       - 5151:5151
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+#    healthcheck:
+#      test: ???
+#      start_period: 10s
 
   chronos:
-    image: mesosphere/chronos:v3.0.2
     container_name: chronos
+    image: mesosphere/chronos:v3.0.2
     command: '--zk_hosts zookeeper:2181 --master zk://zookeeper:2181/mesos'
     environment:
       PORT0: 4400
@@ -58,3 +66,6 @@ services:
     links:
       - zookeeper
       - mesos-master
+    healthcheck:
+      test: "curl -f http://localhost:4400 || exit 1"
+      start_period: 10s

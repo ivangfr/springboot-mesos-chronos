@@ -18,7 +18,7 @@ The idea of the `SLEEP` is to simulate the application processing something that
 2. Go to `/dev` folder inside `/springboot-mesos-chronos` root folder.
 
 3. Export the machine ip address to `HOST_IP_ADDR` environment variable.
-> It can be obtained by executing ifconfig command on Mac/Linux terminal or ipconfig on Windows;
+> It can be obtained by executing `ifconfig` command on Mac/Linux terminal or `ipconfig` on Windows;
 ```
 export HOST_IP_ADDR=...
 ```
@@ -35,12 +35,12 @@ docker-compose ps
 
 You should see something like
 ```
-Name        Command                          State        Ports
--------------------------------------------------------------------
-chronos     /chronos/bin/start.sh --zk ...   Up      0.0.0.0:4400->4400/tcp
-master      mesos-master --registry=in ...   Up      0.0.0.0:5050->5050/tcp
-slave       mesos-slave                      Up      0.0.0.0:5151->5151/tcp
-zookeeper   /docker-entrypoint.sh zkSe ...   Up      0.0.0.0:2181->2181/tcp...
+Name           Command                          State          Ports
+--------------------------------------------------------------------------
+chronos        /chronos/bin/start.sh --zk ...   Up (healthy)   0.0.0.0:4400->4400/tcp
+mesos-master   mesos-master --registry=in ...   Up (healthy)   0.0.0.0:5050->5050/tcp
+mesos-slave    mesos-slave                      Up             0.0.0.0:5151->5151/tcp
+zookeeper      /docker-entrypoint.sh zkSe ...   Up (healthy)   0.0.0.0:2181->2181/tcp...
 ```
 
 ## Build Docker Image
@@ -51,7 +51,7 @@ zookeeper   /docker-entrypoint.sh zkSe ...   Up      0.0.0.0:2181->2181/tcp...
 
 3. To build the docker image run
 ```
-mvn clean package docker:build -DskipTests
+mvn clean package docker:build
 ```
 
 ## Run Docker Container
