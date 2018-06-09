@@ -2,7 +2,7 @@
 
 ## Goal
 
-The goal of this project is to create a simple java application and use `Chronos` to run it in specific intervals.
+The goal of this project is to create a simple Java application and use [`Chronos`](https://mesos.github.io/chronos) to run it in specific intervals.
 In order to simulate finishing status of the job (successfully or error), there is an environment variable `EXIT_CODE` that can be set as:
 ```
 0 = success (default)
@@ -27,6 +27,10 @@ export HOST_IP_ADDR=...
 ```
 docker-compose up -d
 ```
+> To stop and remove containers, networks, images, and volumes type:
+> ```
+> docker-compose down -v
+> ```
 
 5. In order to check if all applications are `UP` and running type
 ```
@@ -69,9 +73,9 @@ docker run --rm \
 1. Go to the `/springboot-mesos-chronos` root folder.
 
 2. You can edit some properties present in `/src/main/resources/job.json`.
-For example, you can change `"schedule"` to the specific date/time (UTC) you want the job to start and the interval and change the `"container.image"` to the newest one.
+For example, you can change `schedule` to the specific date/time (UTC) you want the job to start and the interval and change the `container.image` to the newest one.
 
-3. Use curl command bellow to add jobs to Chronos. For more Chronos endpoints visit https://mesos.github.io/chronos/docs/api.html.
+3. Use `curl` command bellow to add jobs to `Chronos`. For more `Chronos` endpoints visit https://mesos.github.io/chronos/docs/api.html.
 ```
 curl -i -X POST \
   -H "Content-Type: application/json" \
@@ -80,4 +84,4 @@ curl -i -X POST \
 ```
 4. You can check and edit the schedule of the jobs on `Chronos` website: http://localhost:4400
 
-5. In order to check the history of complete tasks, stderr and stdout of those tasks, etc you can visit `Mesos` website: http://localhost:5050
+5. In order to check the history of complete tasks, stderr and stdout of those tasks, etc you can visit [`Mesos`](http://mesos.apache.org) website: http://localhost:5050
