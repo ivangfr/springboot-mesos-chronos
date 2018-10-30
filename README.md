@@ -2,28 +2,27 @@
 
 ## Goal
 
-The goal of this project is to create a simple Java application and use [`Chronos`](https://mesos.github.io/chronos) to run it in specific intervals.
-In order to simulate finishing status of the job (successfully or error), there is an environment variable `EXIT_CODE` that can be set as:
+The goal of this project is to create a simple Java application and use [`Chronos`](https://mesos.github.io/chronos)
+to run it in specific intervals. In order to simulate the finishing status of the job as successfully or error, there
+is an environment variable `EXIT_CODE` that can be set as:
 ```
 0 = success (default)
 !0 = failure.
 ```
-Besides, there is an environment variable called `SLEEP`, `default 5000`, to change the amount of time the thread sleeps (_in milliseconds_).
-The idea of the `SLEEP` is to simulate the application processing something that takes time, for example. 
+Besides, there is an environment variable called `SLEEP`, default `5000`, that can be used to change the amount of time
+the thread sleeps (_in milliseconds_). The idea of the `SLEEP` is to simulate the application processing time. 
 
 ## Start Environment
 
 1. Open one terminal.
 
-2. Go to `/dev` folder inside `/springboot-mesos-chronos` root folder.
-
-3. Export the machine ip address to `HOST_IP_ADDR` environment variable.
+2. Export the machine ip address to `HOST_IP_ADDR` environment variable.
 > It can be obtained by executing `ifconfig` command on Mac/Linux terminal or `ipconfig` on Windows;
 ```
 export HOST_IP_ADDR=...
 ```
 
-4. Inside `/springboot-mesos-chronos/dev` folder run
+3. Go to `/springboot-mesos-chronos` root folder and run
 ```
 docker-compose up -d
 ```
@@ -32,7 +31,7 @@ docker-compose up -d
 > docker-compose down -v
 > ```
 
-5. In order to check if all applications are `UP` and running type
+4. In order to check if all applications are `UP` and running type
 ```
 docker-compose ps
 ```
@@ -51,7 +50,7 @@ zookeeper      /docker-entrypoint.sh zkSe ...   Up (healthy)   0.0.0.0:2181->218
 
 1. Open a new terminal
 
-2. Go to the `/springboot-mesos-chronos` root folder
+2. Go to `/springboot-mesos-chronos` root folder
 
 3. To build the docker image run
 ```
@@ -60,7 +59,7 @@ mvn clean package docker:build
 
 ## Run Docker Container
 
-In order to check if the image was built correctly, run the container.
+In order to check whether the image was built correctly, run the container.
 ```
 docker run --rm \
   -e EXIT_CODE=0 \
@@ -70,18 +69,24 @@ docker run --rm \
 
 ## Running as Chronos Job
 
-1. Go to the `/springboot-mesos-chronos` root folder.
+1. Go to `/springboot-mesos-chronos` root folder.
 
-2. You can edit some properties present in `/src/main/resources/job.json`.
-For example, you can change `schedule` to the specific date/time (UTC) you want the job to start and the interval and change the `container.image` to the newest one.
+2. You can edit some properties present in `/springboot-mesos-chronos/chronos/job.json`. For example, you can change
+the `schedule` to the specific date/time (UTC) or change the `container.image` to the newest one.
 
-3. Use `curl` command bellow to add jobs to `Chronos`. For more `Chronos` endpoints visit https://mesos.github.io/chronos/docs/api.html.
+3. Use the `curl` command bellow to add jobs to `Chronos`. For more `Chronos` endpoints visit
+https://mesos.github.io/chronos/docs/api.html.
 ```
 curl -i -X POST \
   -H "Content-Type: application/json" \
-  -d@./dev/job.json \
+  -d@./chronos/job.json \
   http://localhost:4400/v1/scheduler/iso8601
 ```
 4. You can check and edit the schedule of the jobs on `Chronos` website: http://localhost:4400
 
-5. In order to check the history of complete tasks, stderr and stdout of those tasks, etc you can visit [`Mesos`](http://mesos.apache.org) website: http://localhost:5050
+![chronos](images/chronos.png)
+
+5. In order to check the history of complete tasks, stderr and stdout of those tasks, etc you can visit
+[`Mesos`](http://mesos.apache.org) website: http://localhost:5050
+
+![mesos](images/mesos.png)
