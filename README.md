@@ -107,4 +107,5 @@ curl -i -X POST \
 To stop and remove containers, networks and volumes, run
 ```
 docker-compose down -v
+docker rm -v $(docker ps -a -f status=exited -f status=created -q)
 ```
