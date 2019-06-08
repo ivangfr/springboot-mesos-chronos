@@ -1,6 +1,6 @@
 {
-  "name": "springboot-mesos-chronos-job",
-  "command": "java -jar /springboot-mesos-chronos.jar",
+  "name": "simple-service-job",
+  "command": "java -jar /app.jar",
   "shell": true,
   "executor": "",
   "executorFlags": "",
@@ -24,7 +24,7 @@
     },
     {
       "name": "SLEEP",
-      "value": "1000"
+      "value": "10000"
     }
   ],
   "arguments": [],
@@ -33,13 +33,13 @@
   "concurrent": false,
   "container": {
     "type": "docker",
-    "image": "docker.mycompany.com/springboot-mesos-chronos:1.0.0",
+    "image": "docker.mycompany.com/simple-service:1.0.0",
     "network": "HOST",
     "volumes": [],
     "forcePullImage": false,
     "parameters": []
   },
   "constraints": [],
-  "schedule": "R/2018-10-30T18:30:00.000Z/PT2M",
+  "schedule": "R/2019-06-08T00:00:00.000Z/PT2M",
   "scheduleTimeZone": ""
 }

@@ -1,18 +1,16 @@
-package com.mycompany.springbootmesoschronos.job;
+package com.mycompany.simpleservice.runner;
 
-import java.util.Date;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.ExitCodeGenerator;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+
+@Slf4j
 @Component
 public class JobRunner implements CommandLineRunner, ExitCodeGenerator {
-
-    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Value("${exit.code:0}")
     private int exitCode; // 0 = success or !0 = failure.
@@ -22,11 +20,11 @@ public class JobRunner implements CommandLineRunner, ExitCodeGenerator {
 
     @Override
     public void run(String... arg0) throws Exception {
-        logger.info("Processing job at {} with SLEEP = {} ms", new Date(), sleep);
+        log.info("Processing job at {} with SLEEP = {} ms", LocalDateTime.now(), sleep);
 
         Thread.sleep(sleep);
 
-        logger.info("Job finishing with exit code = {}", exitCode);
+        log.info("Job finishing with exit code = {}", exitCode);
         System.exit(exitCode);
     }
 
