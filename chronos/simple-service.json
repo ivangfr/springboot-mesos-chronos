@@ -40,6 +40,6 @@
     "parameters": []
   },
   "constraints": [],
-  "schedule": "R/2019-06-08T00:00:00.000Z/PT2M",
+  "schedule": "R/2019-11-16T00:00:00.000Z/PT2M",
   "scheduleTimeZone": ""
 }

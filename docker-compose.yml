@@ -1,8 +1,8 @@
-version: '3.5'
+version: '3.7'
 services:
 
   zookeeper:
-    image: confluentinc/cp-zookeeper:5.1.0
+    image: confluentinc/cp-zookeeper:5.3.1
     container_name: zookeeper
     ports:
       - "2181:2181"
@@ -14,7 +14,7 @@ services:
 
   mesos-master:
     container_name: mesos-master
-    image: mesosphere/mesos-master:1.7.0
+    image: mesosphere/mesos-master:1.5.2
     privileged: true
     environment:
       - MESOS_HOSTNAME=$HOST_IP_ADDR
@@ -22,7 +22,7 @@ services:
       - MESOS_QUORUM=1
       - MESOS_ZK=zk://zookeeper:2181/mesos
       - MESOS_LOG_DIR=/tmp/mesos/logs
-    links:
+    depends_on:
       - zookeeper
     ports:
       - "5050:5050"
@@ -32,7 +32,8 @@ services:
 
   mesos-slave:
     container_name: mesos-slave
-    image: mesosphere/mesos-slave:1.7.0
+    image: mesosphere/mesos-slave:1.5.2
+    pid: "host"
     privileged: true
     environment:
       - MESOS_HOSTNAME=$HOST_IP_ADDR
@@ -42,7 +43,7 @@ services:
       - MESOS_SYSTEMD_ENABLE_SUPPORT=false
       - MESOS_CONTAINERIZERS=docker,mesos
       - MESOS_EXECUTOR_REGISTRATION_TIMEOUT=5mins
-    links:
+    depends_on:
       - zookeeper
       - mesos-master
     ports:
@@ -63,9 +64,6 @@ services:
     ports:
       - "4400:4400"
     depends_on:
-      - zookeeper
-      - mesos-master
-    links:
       - zookeeper
       - mesos-master
     healthcheck:

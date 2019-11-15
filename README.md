@@ -1,45 +1,44 @@
 # `springboot-mesos-chronos`
 
-The goal of this project is to create a simple Spring-Boot Java application called `simple-service` and use
-[`Mesos`](http://mesos.apache.org) / [`Chronos`](https://mesos.github.io/chronos) to run it in specific intervals.
+The goal of this project is to create a simple [`Spring Boot`](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/)
+Java application called `simple-service` and use [`Mesos`](http://mesos.apache.org) / [`Chronos`](https://mesos.github.io/chronos)
+to run it in specific intervals.
 
-## Microservice
+## Application
 
 ### simple-service
 
-It is a dummy and simple Spring-Boot Java application. In order to simulate the finishing status of the application
+It is a dummy and simple `Spring Boot` Java application. In order to simulate the finishing status of the application
 successfully or with an error, there is an environment variable `EXIT_CODE`. Besides, there is another environment
 variable called `SLEEP`. It can be used to change the amount of time the thread sleeps (in milliseconds). The idea of
 the `SLEEP` is to simulate the application processing time.
 
 The table below summarizes the environment variables.
 
-| Environment variable | Values | Default | Description |
-| -------------------- | ------ | ------- | ----------- |
-| `EXIT_CODE` | 0 = success; !0 = failure | 0 | For simulating the finishing status of the application |
-| `SLEEP` | integer > 0 | 5000 | For simulating the application processing time (value in milliseconds) |
+| Env. variable | Values                    | Default | Description                                                            |
+| ------------- | ------------------------- | ------- | ---------------------------------------------------------------------- |
+| `EXIT_CODE`   | 0 = success; !0 = failure | 0       | For simulating the finishing status of the application                 |
+| `SLEEP`       | integer > 0               | 5000    | For simulating the application processing time (value in milliseconds) |
 
 ## Start Environment
 
-- Open one terminal.
-
-- Export the machine ip address to `HOST_IP_ADDR` environment variable.
-> It can be obtained by executing `ifconfig` command on Mac/Linux terminal or `ipconfig` on Windows;
+Open one terminal and export the machine ip address to `HOST_IP_ADDR` environment variable. It can be obtained by
+executing `ifconfig` command on Mac/Linux terminal or `ipconfig` on Windows
 ```
 export HOST_IP_ADDR=...
 ```
 
-- Go to `springboot-mesos-chronos` root folder and run
+Inside `springboot-mesos-chronos` root folder and run
 ```
 docker-compose up -d
 ```
 
-- In order to check if all services are up and running type
+In order to check if all services are up and running type
 ```
 docker-compose ps
 ```
 
-You should see something like
+Wait a little bit until `chronos`, `mesos-master` and `zookeeper` are Up (healthy). You should see something like
 ```
 Name           Command                          State          Ports
 --------------------------------------------------------------------------
@@ -49,20 +48,16 @@ mesos-slave    mesos-slave                      Up             0.0.0.0:5151->515
 zookeeper      /docker-entrypoint.sh zkSe ...   Up (healthy)   0.0.0.0:2181->2181/tcp...
 ```
 
-### Link of the Services
+### Services URLs
 
-| Service   | URL                   |
-| --------- | --------------------- |
-| `Mesos`   | http://localhost:5050 |
-| `Chronos` | http://localhost:4400 |
+| Service | URL                   |
+| ------- | --------------------- |
+| Mesos   | http://localhost:5050 |
+| Chronos | http://localhost:4400 |
 
 ## Build Docker Image
 
-- Open a new terminal
-
-- Go to `springboot-mesos-chronos` root folder
-
-- To build the docker image run
+In a terminal and inside `springboot-mesos-chronos` root folder, run the following command
 ```
 ./mvnw clean package dockerfile:build -DskipTests --projects simple-service
 ```
@@ -80,25 +75,24 @@ docker run --rm \
 
 ## Running as a Chronos Job
 
-- Go to `springboot-mesos-chronos` root folder.
+Before adding the job to `Chronos`, edit some properties present in `springboot-mesos-chronos/chronos/simple-service.json`.
+For example, change the `schedule` to a specific date/time (UTC) in the future.
 
-- You can edit some properties present in `springboot-mesos-chronos/chronos/simple-service.json`. For example, you can change
-the `schedule` to a specific date/time (UTC) or change the `container.image` to a newest one.
-
-- Use the `curl` command below to add jobs to `Chronos`. For more `Chronos` endpoints visit
-https://mesos.github.io/chronos/docs/api.html.
+Then, in a terminal and inside `springboot-mesos-chronos` root folder, run the `curl` command below to add jobs to
+`Chronos`. For more `Chronos` endpoints visit https://mesos.github.io/chronos/docs/api.html.
 ```
 curl -i -X POST \
   -H "Content-Type: application/json" \
   -d@./chronos/simple-service.json \
   http://localhost:4400/v1/scheduler/iso8601
 ```
-- In order to check and edit the schedule of the jobs in `Chronos` (http://localhost:4400) website running locally.
+
+In order to check and edit the schedule of the jobs in [`Chronos`](http://localhost:4400) website running locally.
 
 ![chronos](images/chronos.png)
 
-- To check the history of complete tasks, stderr and stdout of those tasks, etc, go to
-`Mesos` (http://localhost:5050) website running locally.
+To check the history of complete tasks, stderr and stdout of those tasks, etc, go to [`Mesos`](http://localhost:5050)
+website running locally.
 
 ![mesos](images/mesos.png)
 
