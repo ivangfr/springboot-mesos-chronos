@@ -1,6 +1,6 @@
 {
   "name": "simple-service-job",
-  "command": "java -jar /app.jar",
+  "command": "java -cp /app/resources:/app/classes:/app/libs/* com.mycompany.simpleservice.SimpleServiceApplication",
   "shell": true,
   "executor": "",
   "executorFlags": "",
@@ -40,6 +40,6 @@
     "parameters": []
   },
   "constraints": [],
-  "schedule": "R/2019-11-16T00:00:00.000Z/PT2M",
+  "schedule": "R/2020-07-04T12:00:00.000Z/PT2M",
   "scheduleTimeZone": ""
 }
