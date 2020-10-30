@@ -4,7 +4,7 @@ The goal of this project is to create a simple [`Spring Boot`](https://docs.spri
 
 ## Application
 
-- **simple-service**
+- ### simple-service
 
   It's a dummy and simple `Spring Boot` Java application. In order to simulate the finishing status of the application successfully or with an error, there is an environment variable `EXIT_CODE`. Besides, there is another environment variable called `SLEEP`. It can be used to change the amount of time the thread sleeps (in milliseconds). The idea of the `SLEEP` is to simulate the application processing time.
 
@@ -21,6 +21,45 @@ The goal of this project is to create a simple [`Spring Boot`](https://docs.spri
 - [`Docker`](https://www.docker.com/)
 - [`Docker-Compose`](https://docs.docker.com/compose/install/)
 
+## Warning: Mac Users
+
+   After some recent `Docker Desktop` updates, we need to add a new directory called `/var/lib` to Docker `File Sharing` resources, otherwise we will see an exception like
+   ```
+   docker: Error response from daemon: Mounts denied: 
+   The path /var/lib/mesos/slaves/347adc13-aad3-4c25-9864-ee2ebcc97572-S0/frameworks/347adc13-aad3-4c25-9864-ee2ebcc97572-0000/executors/keycloak.05642772-1ae3-11eb-aecf-0242ac120007/runs/33e0751e-1a0a-40d8-b9f8-cfa706679172
+   is not shared from OS X and is not known to Docker.
+   You can configure shared paths from Docker -> Preferences... -> File Sharing.
+   See https://docs.docker.com/docker-for-mac/osxfs/#namespaces for more info.
+   ```
+
+   Unfortunately, it's not possible to do it by using `Docker Desktop` UI. So, we need to do it manually by following the next steps:
+   - Open `~/Library/Group\ Containers/group.com.docker/settings.json` using your favorite editor;
+   - At the top of the file you will see an array that looks like this:
+     ```
+     "filesharingDirectories" : [
+       "\/Users",
+       "\/Volumes",
+       "\/private",
+       "\/tmp"
+     ],
+     ```
+   - Append the following line:
+     ```
+     "\/var\/lib"
+     ```
+   - The new array should now look like the one below (mind the comma after `"\/tmp"`):
+     ```
+     "filesharingDirectories" : [
+       "\/Users",
+       "\/Volumes",
+       "\/private",
+       "\/tmp",
+       "\/var\/lib"
+     ],
+     ```
+   - Save the file and exit;
+   - Restart `Docker Desktop`.
+
 ## Start Environment
 
 - Open one terminal and export the machine ip address to `HOST_IP_ADDR` environment variable. It can be obtained by executing `ifconfig` command on Mac/Linux terminal or `ipconfig` on Windows
@@ -33,7 +72,7 @@ The goal of this project is to create a simple [`Spring Boot`](https://docs.spri
   docker-compose up -d
   ```
 
-- Wait a little bit until `chronos`, `mesos-master` and `zookeeper` are Up (healthy). In order to check it run
+- Wait a bit until `chronos`, `mesos-master` and `zookeeper` are Up (healthy). In order to check it run
   ```
   docker-compose ps
   ```
@@ -91,3 +130,8 @@ The goal of this project is to create a simple [`Spring Boot`](https://docs.spri
   docker-compose down -v
   docker rm -v $(docker ps -a -f status=exited -f status=created -q)
   ```
+
+- Undo changes on `~/Library/Group\ Containers/group.com.docker/settings.json` file
+  - Open `~/Library/Group\ Containers/group.com.docker/settings.json` using your favorite editor;
+  - Remove `"\/var\/lib"` of the `filesharingDirectories` array present at the top of file;
+  - Restart `Docker Desktop`.

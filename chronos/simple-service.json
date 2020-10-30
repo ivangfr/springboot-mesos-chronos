@@ -11,7 +11,7 @@
   "description": "What this job does is ...",
   "cpus": 0.1,
   "disk": 0,
-  "mem": 999,
+  "mem": 128,
   "disabled": false,
   "softError": false,
   "dataProcessingJobType": false,
@@ -40,6 +40,6 @@
     "parameters": []
   },
   "constraints": [],
-  "schedule": "R/2020-07-04T12:00:00.000Z/PT2M",
+  "schedule": "R/2020-10-31T00:00:00.000Z/PT2M",
   "scheduleTimeZone": ""
 }
