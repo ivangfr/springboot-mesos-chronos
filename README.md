@@ -34,31 +34,33 @@ The goal of this project is to create a simple [`Spring Boot`](https://docs.spri
 
    Unfortunately, it's not possible to do it by using `Docker Desktop` UI. So, we need to do it manually by following the next steps:
    - Open `~/Library/Group\ Containers/group.com.docker/settings.json` using your favorite editor;
-   - At the top of the file you will see an array that looks like this:
+   - Look for `filesharingDirectories`. It should look like
      ```
-     "filesharingDirectories" : [
-       "\/Users",
-       "\/Volumes",
-       "\/private",
-       "\/tmp"
+     "filesharingDirectories": [
+       "/Users",
+       "/Volumes",
+       "/private",
+       "/tmp",
+       "/var/folders"
      ],
      ```
    - Append the following line:
      ```
-     "\/var\/lib"
+     "/var/lib"
      ```
-   - The new array should now look like the one below (mind the comma after `"\/tmp"`):
+   - The new array should now look like the one below (mind the comma after `"\var/folders"`):
      ```
-     "filesharingDirectories" : [
-       "\/Users",
-       "\/Volumes",
-       "\/private",
-       "\/tmp",
-       "\/var\/lib"
+     "filesharingDirectories": [
+       "/Users",
+       "/Volumes",
+       "/private",
+       "/tmp",
+       "/var/folders",
+       "/var/lib"
      ],
      ```
-   - Save the file and exit;
-   - Restart `Docker Desktop`.
+   - Save the file and exit
+   - Restart `Docker Desktop`
 
 ## Start Environment
 
@@ -97,14 +99,14 @@ The goal of this project is to create a simple [`Spring Boot`](https://docs.spri
   ```
   docker run --rm --name simple-service \
     -e EXIT_CODE=0 -e SLEEP=1000 \
-    docker.mycompany.com/simple-service:1.0.0; echo $?
+    ivanfranchin/simple-service:1.0.0; echo $?
   ```
 
 ## Running as a Chronos Job
 
 - Edit some properties present in `springboot-mesos-chronos/chronos/simple-service.json`. For example, change the `schedule` to a specific date/time (UTC) in the future.
 
-- In a terminal and inside `springboot-mesos-chronos` root folder, run the `curl` command below to add jobs to `Chronos`.
+- In a terminal and, inside `springboot-mesos-chronos` root folder, run the `curl` command below to add jobs to `Chronos`.
   ```
   curl -i -X POST \
     -H "Content-Type: application/json" \
@@ -125,13 +127,18 @@ The goal of this project is to create a simple [`Spring Boot`](https://docs.spri
 
 - In a terminal, make sure you are inside `springboot-mesos-chronos` root folder
 
-- To stop and remove docker-compose containers, networks and volumes, run
+- To stop and remove docker-compose containers, network and volumes, run
   ```
   docker-compose down -v
   docker rm -v $(docker ps -a -f status=exited -f status=created -q)
   ```
 
 - Undo changes in `~/Library/Group\ Containers/group.com.docker/settings.json` file
-  - Open `~/Library/Group\ Containers/group.com.docker/settings.json` using your favorite editor;
-  - Remove `"\/var\/lib"` of the `filesharingDirectories` array present at the top of file;
-  - Restart `Docker Desktop`.
+  - Open `~/Library/Group\ Containers/group.com.docker/settings.json` using your favorite editor
+  - Remove `"/var/lib"` of the `filesharingDirectories` array present at the top of file
+  - Restart `Docker Desktop`
+
+- To remove the Docker image created in this project, run
+  ```
+  docker rmi ivanfranchin/simple-service:1.0.0
+  ```

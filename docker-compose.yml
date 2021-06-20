@@ -3,7 +3,7 @@ version: '3.8'
 services:
 
   zookeeper:
-    image: confluentinc/cp-zookeeper:5.5.1
+    image: confluentinc/cp-zookeeper:6.1.1
     container_name: zookeeper
     ports:
       - "2181:2181"
@@ -14,8 +14,8 @@ services:
       start_period: 10s
 
   mesos-master:
-    container_name: mesos-master
     image: mesosphere/mesos-master:1.5.2
+    container_name: mesos-master
     privileged: true
     environment:
       - MESOS_HOSTNAME=$HOST_IP_ADDR
@@ -32,8 +32,8 @@ services:
       start_period: 10s
 
   mesos-slave:
-    container_name: mesos-slave
     image: mesosphere/mesos-slave:1.5.2
+    container_name: mesos-slave
     pid: "host"
     privileged: true
     environment:
@@ -56,8 +56,8 @@ services:
 #      start_period: 10s
 
   chronos:
-    container_name: chronos
     image: mesosphere/chronos:v3.0.2
+    container_name: chronos
     command: '--zk_hosts zookeeper:2181 --master zk://zookeeper:2181/mesos'
     environment:
       PORT0: 4400

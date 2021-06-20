@@ -33,13 +33,13 @@
   "concurrent": false,
   "container": {
     "type": "docker",
-    "image": "docker.mycompany.com/simple-service:1.0.0",
+    "image": "ivanfranchin/simple-service:1.0.0",
     "network": "HOST",
     "volumes": [],
     "forcePullImage": false,
     "parameters": []
   },
   "constraints": [],
-  "schedule": "R/2020-10-31T00:00:00.000Z/PT2M",
+  "schedule": "R/2021-06-21T00:00:00.000Z/PT2M",
   "scheduleTimeZone": ""
 }
