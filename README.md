@@ -48,7 +48,7 @@ The goal of this project is to create a simple [`Spring Boot`](https://docs.spri
      ```
      "/var/lib"
      ```
-   - The new array should now look like the one below (mind the comma after `"\var/folders"`):
+   - The new array should now look like the one below (mind the comma after `"/var/folders"`):
      ```
      "filesharingDirectories": [
        "/Users",
@@ -95,7 +95,7 @@ The goal of this project is to create a simple [`Spring Boot`](https://docs.spri
   ./mvnw clean compile jib:dockerBuild --projects simple-service
   ```
 
-- You can check the application and docker image by running
+- You can check the application and Docker image by running
   ```
   docker run --rm --name simple-service \
     -e EXIT_CODE=0 -e SLEEP=1000 \
@@ -104,7 +104,7 @@ The goal of this project is to create a simple [`Spring Boot`](https://docs.spri
 
 ## Running as a Chronos Job
 
-- Edit some properties present in `springboot-mesos-chronos/chronos/simple-service.json`. For example, change the `schedule` to a specific date/time (UTC) in the future.
+- Edit some properties present in `chronos/simple-service.json`. For example, change the `schedule` to a specific date/time (UTC) in the future.
 
 - In a terminal and, inside `springboot-mesos-chronos` root folder, run the `curl` command below to add jobs to `Chronos`.
   ```
@@ -138,7 +138,9 @@ The goal of this project is to create a simple [`Spring Boot`](https://docs.spri
   - Remove `"/var/lib"` of the `filesharingDirectories` array present at the top of file
   - Restart `Docker Desktop`
 
-- To remove the Docker image created in this project, run
-  ```
-  docker rmi ivanfranchin/simple-service:1.0.0
-  ```
+## Cleanup
+
+To remove the Docker image created in this project, go to a terminal and run the command below
+```
+docker rmi ivanfranchin/simple-service:1.0.0
+```
