@@ -32,5 +32,4 @@ public class JobRunner implements CommandLineRunner, ExitCodeGenerator {
     public int getExitCode() {
         return exitCode;
     }
-
 }

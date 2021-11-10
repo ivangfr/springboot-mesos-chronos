@@ -11,14 +11,13 @@ services:
       ZOOKEEPER_CLIENT_PORT: 2181
     healthcheck:
       test: "echo stat | nc localhost $$ZOOKEEPER_CLIENT_PORT"
-      start_period: 10s
 
   mesos-master:
     image: mesosphere/mesos-master:1.5.2
     container_name: mesos-master
     privileged: true
     environment:
-      - MESOS_HOSTNAME=$HOST_IP_ADDR
+      - MESOS_HOSTNAME=$HOST_IP
       - MESOS_CLUSTER=SMACK
       - MESOS_QUORUM=1
       - MESOS_ZK=zk://zookeeper:2181/mesos
@@ -29,7 +28,6 @@ services:
       - "5050:5050"
     healthcheck:
       test: "curl -f http://localhost:5050/health || exit 1"
-      start_period: 10s
 
   mesos-slave:
     image: mesosphere/mesos-slave:1.5.2
@@ -37,7 +35,7 @@ services:
     pid: "host"
     privileged: true
     environment:
-      - MESOS_HOSTNAME=$HOST_IP_ADDR
+      - MESOS_HOSTNAME=$HOST_IP
       - MESOS_PORT=5151
       - MESOS_MASTER=zk://zookeeper:2181/mesos
       - MESOS_WORK_DIR=/var/lib/mesos
@@ -51,9 +49,6 @@ services:
       - "5151:5151"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-#    healthcheck:
-#      test: ???
-#      start_period: 10s
 
   chronos:
     image: mesosphere/chronos:v3.0.2
@@ -69,4 +64,3 @@ services:
       - mesos-master
     healthcheck:
       test: "curl -f http://localhost:4400 || exit 1"
-      start_period: 10s

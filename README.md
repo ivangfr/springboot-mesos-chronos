@@ -17,7 +17,7 @@ The goal of this project is to create a simple [`Spring Boot`](https://docs.spri
 
 ## Prerequisites
 
-- [`Java 11+`](https://www.oracle.com/java/technologies/javase-jdk11-downloads.html)
+- [`Java 11+`](https://www.oracle.com/java/technologies/downloads/#java11)
 - [`Docker`](https://www.docker.com/)
 - [`Docker-Compose`](https://docs.docker.com/compose/install/)
 
@@ -64,17 +64,19 @@ The goal of this project is to create a simple [`Spring Boot`](https://docs.spri
 
 ## Start Environment
 
-- Open one terminal and export the machine ip address to `HOST_IP_ADDR` environment variable. It can be obtained by executing `ifconfig` command on Mac/Linux terminal or `ipconfig` on Windows
+- Open a terminal and make sure you are in `springboot-mesos-chronos` root folder
+
+- Export to an environment variable called `HOST_IP` the machine ip address
   ```
-  export HOST_IP_ADDR=...
+  export HOST_IP=$(ipconfig getifaddr en0)
   ```
 
-- Inside `springboot-mesos-chronos` root folder and run
+- Run the following command
   ```
   docker-compose up -d
   ```
 
-- Wait a bit until `chronos`, `mesos-master` and `zookeeper` are Up (healthy). In order to check it run
+- Wait for Docker containers to be up and running. To check it, run
   ```
   docker-compose ps
   ```
@@ -117,11 +119,11 @@ The goal of this project is to create a simple [`Spring Boot`](https://docs.spri
 
 - You can check and edit the schedule of the jobs by visiting [`Chronos` website](http://localhost:4400).
 
-  ![chronos](images/chronos.png)
+  ![chronos](documentation/chronos.png)
 
 - To check the history of complete tasks, stderr and stdout of those tasks, etc, visit [`Mesos` website](http://localhost:5050).
 
-  ![mesos](images/mesos.png)
+  ![mesos](documentation/mesos.png)
 
 ## Shutdown
 
@@ -133,14 +135,16 @@ The goal of this project is to create a simple [`Spring Boot`](https://docs.spri
   docker rm -v $(docker ps -a -f status=exited -f status=created -q)
   ```
 
-- Undo changes in `~/Library/Group\ Containers/group.com.docker/settings.json` file
+## Cleanup
+
+- To remove the Docker image created in this project, go to a terminal and run the command below
+  ```
+  docker rmi ivanfranchin/simple-service:1.0.0
+  ```
+
+- **Mac Users**
+
+  Undo changes in `~/Library/Group\ Containers/group.com.docker/settings.json` file
   - Open `~/Library/Group\ Containers/group.com.docker/settings.json` using your favorite editor
   - Remove `"/var/lib"` of the `filesharingDirectories` array present at the top of file
   - Restart `Docker Desktop`
-
-## Cleanup
-
-To remove the Docker image created in this project, go to a terminal and run the command below
-```
-docker rmi ivanfranchin/simple-service:1.0.0
-```
